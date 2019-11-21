@@ -86,6 +86,7 @@ class SelfDiagnosisClass(APIView):
             is_visited=is_visited,
             is_rediagnose=is_rediagnose,
             medicine=medicine,
+            avg_price=sum([Disease.objects.get(name=symtom["name"]).price for symtom in symtom_list]) / len(symtom_list)
         )
         
         self_diagnosis.save()
@@ -97,7 +98,22 @@ class SelfDiagnosisClass(APIView):
             degree = symtom['degree']
             Symtom.objects.create(self_diagnosis=self_diagnosis,name=disease,period=period,degree=degree)
 
-        return Response(status=status.HTTP_200_OK)
+        return Response({ id: self_diagnosis.id }, status=status.HTTP_200_OK)
+
+class TreatmentClass(APIView):
+    def post(self, request, format=None):
+        self_diagnosis = SelfDiagnosis.objects.get(id=request.data.get("self_diagnosis"))
+        department = self_diagnosis.department
+        queryset = Treatment.objects.filter(department=department)
+        serializer = TreatmentSerializer(queryset,many=True)
+
+        context = {
+            'base_fare': department.base_fare,
+            'treatment_list': serializer.data,
+            'avg_price': self_diagnosis.avg_price
+        }
+
+        return Response(context, status=status.HTTP_200_OK)
 
 # {
 #     "department": "가정의학과",

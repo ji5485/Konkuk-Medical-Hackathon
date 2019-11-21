@@ -14,6 +14,7 @@ class SelfDiagnosis(models.Model):
     is_visited = models.BooleanField(null=True)
     is_rediagnose = models.BooleanField(null=True)
     medicine = models.TextField(null=True)
+    avg_price = models.IntegerField()
 
 class Symtom(models.Model):
     self_diagnosis = models.ForeignKey(SelfDiagnosis, on_delete=models.CASCADE)
