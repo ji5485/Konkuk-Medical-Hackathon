@@ -57,13 +57,6 @@ class MedicalDepartmentClass(APIView):
         }
         return Response(context)
 
-    # 전화번호부 아이템 제거
-    def delete(self, request, format=None):
-        id = request.data.get('id')
-        post = Phone.objects.get(id=id)
-        post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
 class SelfDiagnosisClass(APIView):
     def post(self, request, format=None):
         department_name = request.data.get('department')
@@ -93,7 +86,7 @@ class SelfDiagnosisClass(APIView):
             degree = symtom['degree']
             Symtom.objects.create(self_diagnosis=self_diagnosis,name=disease,period=period,degree=degree)
 
-        return Response({ id: self_diagnosis.id }, status=status.HTTP_200_OK)
+        return Response({ 'id': self_diagnosis.id }, status=status.HTTP_200_OK)
 
 class TreatmentClass(APIView):
     def post(self, request, format=None):
