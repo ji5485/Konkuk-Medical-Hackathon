@@ -26,11 +26,6 @@ def dummy_data(request):
     
     return HttpResponse("데이터가 생성되었습니다.")
 
-def main(request):
-
-    return render(request, 'core/main.html')
-
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
